@@ -54,3 +54,43 @@ function start() {
             }
         })
 }
+
+function addBussinessRole() {
+    inquirer
+        .prompt([{
+            name: "title",
+            type: "input",
+            message: "which title will we be adding?"
+        },
+        {
+            name: "salary",
+            type: "number",
+            message: "how much is this joker gonna make?",
+        },
+    ]).then(function (answer){
+        connection.query("INSERT INTO bussiness_role (title,salary) values (?,?)",
+        (answer.title, answer.salary),
+        function (err){
+            if (err) throw err;
+            console.log("you added that joker")
+        })
+        start();
+    })
+}
+
+function addDepartment() {
+    inquirer
+    .prompt([{
+        name: "department",
+        typer: "input",
+        message: "department name please?"
+    }]).then(function(answer){
+        connection.query("INSERT INTO department (department_name) VALUES ?"),
+        (answer.department),
+        function (err) {
+            if (err) throw err;
+            console.log("you have added a department");
+            start();
+        }
+    })
+}
