@@ -186,24 +186,28 @@ function addNewGuy() {
 
             inquirer
                 .prompt([{
-                    name: "kick employee",
+                    name: "kickEmployee",
                     type: "list",
                     choices: function () {
                         let disgruntledEmployee = [];
                         for (let i = 0; i < res.length; i++) {
-                            disgruntledEmployee.push(res[i].id + " " + res[i].first_name + " " + res[i].last_name);
+                            disgruntledEmployee.push(res[i].id);
                         }
                         return disgruntledEmployee;
                     },
                     message: "remove this clown or what?"
-                }]).then(function (res) {
-                    console.log(res.id);
-                    connection.query("DELETE FROM employee WHERE id = ${res.disgruntledEmployee}", function (err, res) {
-                        if (err) throw err;
-                        console.log("employee kicked rocks!")
+                
+                }]).then(function (answer) {
+                    console.log(answer);
+                    connection.query ("DELETE FROM employee WHERE ?");
+                    let newId = Number(answer.kickEmloyee);
+                    console.log(newId);
+                    connection.query(query, {id: newId}, function(err, res){
                         startApp();
-
                     })
+
+                    
+                   
 
                 })
         })
