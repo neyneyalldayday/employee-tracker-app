@@ -132,84 +132,87 @@ function addNewGuy() {
                             if (err) throw err;
                             startApp();
                         })
-                    })
-        })        }
-
-    function addDepartment() {
-        inquirer
-            .prompt([{
-                name: "department",
-                typer: "input",
-                message: "department name please?"
-            }]).then(function (answer) {
-                connection.query("INSERT INTO department (department_name) VALUES (?)",
-                    [answer.department],
-                    function (err) {
-                        if (err) throw err;
-                        console.table(answer);
-                        startApp();
-                    })
-            })
-    }
-
-    function viewBussinessRoles() {
-        connection.query("SELECT title, salary AS department_name FROM business_role INNER JOIN department ON business_role.department_id = department.id",
-            function (err, res) {
-                if (err) throw err;
-                console.table(res);
-                startApp();
-            })
-    }
-
-    function viewDepartments() {
-        connection.query("SELECT * FROM department",
-            function (err, res) {
-                if (err) throw err;
-                console.table(res);
-                startApp();
-            })
-    }
-
-    function viewEmployees() {
-        connection.query("SELECT employee.id, employee.first_name, employee.last_name, business_role.title, department.department_name  AS department, business_role.salary, CONCAT(employee.first_name, ' ', employee.last_name) as manager FROM employee LEFT JOIN business_role ON employee.role_id = business_role.id LEFT JOIN department ON business_role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id",
-            function (err, res) {
-                if (err) throw err;
-                console.table(res);
-                startApp();
-            })
-    }
-
-    function kickRocksEmployee() {
-        console.log("employee is on the done-zo list");
-        connection.query("SELECT * FROM employee", function (err, res) {
-            if (err) throw err;
-
-            inquirer
-                .prompt([{
-                    name: "kickEmployee",
-                    type: "list",
-                    choices: function () {
-                        let disgruntledEmployee = [];
-                        for (let i = 0; i < res.length; i++) {
-                            disgruntledEmployee.push(res[i].id);
-                        }
-                        return disgruntledEmployee;
-                    },
-                    message: "remove this clown or what?"
-                
-                }]).then(function (answer) {
-                    console.log(answer);
-                    connection.query ("DELETE FROM employee WHERE ?");
-                    let newId = Number(answer.kickEmloyee);
-                    console.log(newId);
-                    connection.query(query, {id: newId}, function(err, res){
-                        startApp();
-                    })
-
-                    
-                   
-
                 })
         })
-    }
-    startApp();
+}
+
+function addDepartment() {
+    inquirer
+        .prompt([{
+            name: "department",
+            typer: "input",
+            message: "department name please?"
+        }]).then(function (answer) {
+            connection.query("INSERT INTO department (department_name) VALUES (?)",
+                [answer.department],
+                function (err) {
+                    if (err) throw err;
+                    console.table(answer);
+                    startApp();
+                })
+        })
+}
+
+function viewBussinessRoles() {
+    connection.query("SELECT title, salary AS department_name FROM business_role INNER JOIN department ON business_role.department_id = department.id",
+        function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            startApp();
+        })
+}
+
+function viewDepartments() {
+    connection.query("SELECT * FROM department",
+        function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            startApp();
+        })
+}
+
+function viewEmployees() {
+    connection.query("SELECT employee.id, employee.first_name, employee.last_name, business_role.title, department.department_name  AS department, business_role.salary, CONCAT(employee.first_name, ' ', employee.last_name) as manager FROM employee LEFT JOIN business_role ON employee.role_id = business_role.id LEFT JOIN department ON business_role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id",
+        function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            startApp();
+        })
+}
+
+function kickRocksEmployee() {
+    connection.query("SELECT * FROM employee", function (err, res) {
+        if (err) throw err;
+        inquirer
+            .prompt({
+                name: "byeEmploy",
+                type: "rawlist",
+                choices: function () {
+                    let doneList = [];
+                    for (let i = 0; i < res.length; i++) {
+                        doneList.push(res[i].id);
+                    }
+                    return doneList;
+                },
+                message: "whos on the chopping block?"
+            }).then(function (res) {
+                console.log(res.byeEmploy);
+                connection.query("DELETE FROM employee WHERE ?", {
+                        id: res.byeEmploy
+                    },
+                    function (err, res) {
+                        if (err) throw err;
+                        console.table("here we go again on our own, going down the only road weve ever known...")
+                    })
+                startApp();
+            })
+    })
+
+
+
+
+
+
+
+}
+startApp();
