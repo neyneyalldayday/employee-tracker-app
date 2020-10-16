@@ -3,6 +3,7 @@
 ## Description
  
 this app lets you configure your team of employees. you can add departments and roles you your current business. you can also add employees. 
+https://youtu.be/YyeNGtX1iBY
  
 ## Table of Contents
  
