@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var conTable = require("console.table");
+const cfonts = require('cfonts');
 
 
 
@@ -19,8 +20,26 @@ connection.connect(function (err) {
 
 });
 
+const fontConfig = {
+    font: '3d', // Choose the font style. Available options: 'block', 'simpleBlock', 'simple', '3d', 'simple3d', and more.
+    align: 'left', // Alignment: 'left', 'center', or 'right'
+    colors: ['blueBright', 'yellow'], // Colors for each line. You can use ANSI color codes as well.
+    background: 'black', // Background color. Use ANSI color codes or a color name.
+    letterSpacing: 1, // Adjust letter spacing.
+    lineHeight: 2,
+    fontSize: 'small',
+    
+  };
+
+
+  function displayHeader() {
+    cfonts.say("We Pay\nshit$", fontConfig)
+    console.log('--------------------------------------------------');
+  }
+
 
 function startApp() {
+    displayHeader()
     inquirer
         .prompt({
             name: "task",
